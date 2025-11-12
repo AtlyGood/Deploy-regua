@@ -142,21 +142,25 @@ def upload_foto_perfil(request):
         try:
             usuario = Usuario.objects.get(id=request.session['usuario_id'])
             
-            # Remove a foto antiga se existir
+            # Remove a foto antiga se existir (MANEIRA CORRETA)
             if usuario.foto_perfil:
-                if os.path.isfile(usuario.foto_perfil.path):
-                    os.remove(usuario.foto_perfil.path)
+                # O Django gerencia a remoção do arquivo antigo automaticamente
+                # quando você atribui um novo arquivo ao mesmo campo
+                usuario.foto_perfil.delete(save=False)
             
-            # Salva a nova foto
-            foto = request.FILES['foto_perfil']
-            fs = FileSystemStorage()
-            filename = fs.save(f'perfil/user_{usuario.id}_{foto.name}', foto)
-            usuario.foto_perfil = filename
+            # Salva a nova foto (MANEIRA SIMPLES E CORRETA)
+            usuario.foto_perfil = request.FILES['foto_perfil']
             usuario.save()
             
-            return JsonResponse({'status': 'success', 'foto_url': usuario.foto_perfil.url})
+            return JsonResponse({
+                'status': 'success', 
+                'foto_url': usuario.foto_perfil.url
+            })
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+            return JsonResponse({
+                'status': 'error', 
+                'message': str(e)
+            }, status=400)
     
     return JsonResponse({'status': 'error'}, status=400)
 
@@ -199,10 +203,13 @@ def deletar_conta(request):
         try:
             usuario = Usuario.objects.get(id=request.session['usuario_id'])
             
-            # Remove a foto de perfil se existir
+            # Remove a foto de perfil se existir (MANEIRA CORRETA)
             if usuario.foto_perfil:
-                if os.path.isfile(usuario.foto_perfil.path):
-                    os.remove(usuario.foto_perfil.path)
+                usuario.foto_perfil.delete(save=False)
+            
+            # Se for barbearia, remove o logo também
+            if hasattr(usuario, 'barbearia') and usuario.barbearia.foto_logo:
+                usuario.barbearia.foto_logo.delete(save=False)
             
             usuario.delete()
             request.session.flush()
@@ -234,14 +241,11 @@ def barbeiro_pag(request):
         return redirect('loginatalho')
 
 def cadastro_barbearia(request):
-    # Verifica se o usuário está logado
     if not request.session.get('logado'):
         return redirect('loginatalho')
     
     try:
-        
         usuario = Usuario.objects.get(id=request.session['usuario_id'])
-        
         
         if hasattr(usuario, 'barbearia'):
             messages.warning(request, 'Você já possui uma barbearia cadastrada!')
@@ -253,17 +257,22 @@ def cadastro_barbearia(request):
 
     if request.method == 'POST':
         try:
-            # Cria a barbearia associada ao usuário existente
-            barbearia = Barbearia.objects.create(
-                usuario=usuario,  # Associa ao usuário logado
+            # Cria a barbearia (MANEIRA CORRETA)
+            barbearia = Barbearia(
+                usuario=usuario,
                 nome_barbearia=request.POST['nome_barbearia'],
                 telefone_comercial=request.POST['telefone_comercial'],
                 endereco=request.POST['endereco'],
                 cidade=request.POST['cidade'],
                 estado=request.POST['estado'],
-                foto_logo=request.FILES.get('logo-upload'),
                 status_barbearia=request.POST.get('status_barbearia', 'aberto')
             )
+            
+            # Salva o logo se foi enviado
+            if 'logo-upload' in request.FILES:
+                barbearia.foto_logo = request.FILES['logo-upload']
+            
+            barbearia.save()
 
             # Atualiza o tipo do usuário para barbearia
             if usuario.tipo != 'barbearia':
@@ -277,7 +286,6 @@ def cadastro_barbearia(request):
             print(f"Erro ao cadastrar barbearia: {str(e)}")
             messages.error(request, f'Erro ao cadastrar barbearia: {str(e)}')
     
-    # Contexto para o template
     context = {
         'usuario': usuario,
         'nome_completo': f"{usuario.nome} {usuario.sobrenome}",
@@ -331,22 +339,26 @@ def minha_barbearia(request):
 
     if request.method == 'POST':
         if 'excluir_barbearia' in request.POST:
+            # Remove o logo se existir (MANEIRA CORRETA)
+            if barbearia.foto_logo:
+                barbearia.foto_logo.delete(save=False)
             barbearia.delete()
             messages.success(request, "Barbearia excluída com sucesso!")
             return redirect('barbeiroatalho')
         
         try:
-            
             barbearia.nome_barbearia = request.POST['nome_barbearia']
             barbearia.telefone_comercial = request.POST['telefone_comercial']
             barbearia.endereco = request.POST['endereco']
             barbearia.cidade = request.POST['cidade']
             barbearia.estado = request.POST['estado']
-            
-            
             barbearia.status_barbearia = request.POST.get('status_barbearia', 'aberto')
             
+            # Atualiza o logo se foi enviado (MANEIRA CORRETA)
             if 'logo-upload' in request.FILES:
+                # Remove o logo antigo se existir
+                if barbearia.foto_logo:
+                    barbearia.foto_logo.delete(save=False)
                 barbearia.foto_logo = request.FILES['logo-upload']
             
             barbearia.save()
