@@ -27,6 +27,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'regua2',
+    # ADICIONE estas duas apps para Cloudinary
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -99,6 +102,16 @@ TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_TZ = True
 
+# Cloudinary Configuration - ADICIONE ESTA SEÇÃO
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dzucrvvpl'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '926736494999697'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', 'c5HhdXH7voS1CgN3Z-YhHYScmc4'),
+}
+
+# Storage configuration - ALTERE ESTA LINHA
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -106,7 +119,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-# Media files
+# Media files - MANTENHA ASSIM (Cloudinary irá substituir)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
