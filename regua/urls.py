@@ -4,7 +4,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from regua2.views import pag_principal, Home, perfil, barbearia, cadastro, login, limpar_sessao_sucesso,buscar_meu_horario_estimado, logout, atualizar_perfil, deletar_conta, upload_foto_perfil, barbeiro_pag, cadastro_barbearia, minha_barbearia, perfil_barb, criar_agendamento, buscar_horarios, meus_agendamentos, cancelar_agendamento
-from regua2.views import agendamentos_barbeiro, confirmar_agendamento, cancelar_agendamento_barbeiro, verificar_status_barbearia, salvar_horario_estimado, verificar_agendamento_ativo, cancelar_agendamento_barbeiro
+from regua2.views import agendamentos_barbeiro, alterar_tema, alterar_tamanho_fonte, resetar_acessibilidade,  confirmar_agendamento, cancelar_agendamento_barbeiro, verificar_status_barbearia, salvar_horario_estimado, verificar_agendamento_ativo, cancelar_agendamento_barbeiro
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', pag_principal, name='pag_inicial_atalho'),
@@ -33,4 +33,7 @@ urlpatterns = [
     path('cancelar-agendamento-barbeiro/<int:agendamento_id>/', cancelar_agendamento_barbeiro, name='cancelar_agendamento_barbeiro'),
     path('salvar-horario-estimado/<int:agendamento_id>/', salvar_horario_estimado, name='salvar_horario_estimado'),
     path('buscar-meu-horario-estimado/', buscar_meu_horario_estimado, name='buscar_meu_horario_estimado'),
+    path('alterar-tema/', alterar_tema, name='alterar_tema'),
+    path('alterar-tamanho-fonte/', alterar_tamanho_fonte, name='alterar_tamanho_fonte'),
+    path('resetar-acessibilidade/', resetar_acessibilidade, name='resetar_acessibilidade'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

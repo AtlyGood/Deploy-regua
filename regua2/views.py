@@ -142,25 +142,21 @@ def upload_foto_perfil(request):
         try:
             usuario = Usuario.objects.get(id=request.session['usuario_id'])
             
-            # Remove a foto antiga se existir (MANEIRA CORRETA)
+            # Remove a foto antiga se existir
             if usuario.foto_perfil:
-                # O Django gerencia a remoção do arquivo antigo automaticamente
-                # quando você atribui um novo arquivo ao mesmo campo
-                usuario.foto_perfil.delete(save=False)
+                if os.path.isfile(usuario.foto_perfil.path):
+                    os.remove(usuario.foto_perfil.path)
             
-            # Salva a nova foto (MANEIRA SIMPLES E CORRETA)
-            usuario.foto_perfil = request.FILES['foto_perfil']
+            # Salva a nova foto
+            foto = request.FILES['foto_perfil']
+            fs = FileSystemStorage()
+            filename = fs.save(f'perfil/user_{usuario.id}_{foto.name}', foto)
+            usuario.foto_perfil = filename
             usuario.save()
             
-            return JsonResponse({
-                'status': 'success', 
-                'foto_url': usuario.foto_perfil.url
-            })
+            return JsonResponse({'status': 'success', 'foto_url': usuario.foto_perfil.url})
         except Exception as e:
-            return JsonResponse({
-                'status': 'error', 
-                'message': str(e)
-            }, status=400)
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     
     return JsonResponse({'status': 'error'}, status=400)
 
@@ -203,13 +199,10 @@ def deletar_conta(request):
         try:
             usuario = Usuario.objects.get(id=request.session['usuario_id'])
             
-            # Remove a foto de perfil se existir (MANEIRA CORRETA)
+            # Remove a foto de perfil se existir
             if usuario.foto_perfil:
-                usuario.foto_perfil.delete(save=False)
-            
-            # Se for barbearia, remove o logo também
-            if hasattr(usuario, 'barbearia') and usuario.barbearia.foto_logo:
-                usuario.barbearia.foto_logo.delete(save=False)
+                if os.path.isfile(usuario.foto_perfil.path):
+                    os.remove(usuario.foto_perfil.path)
             
             usuario.delete()
             request.session.flush()
@@ -241,11 +234,14 @@ def barbeiro_pag(request):
         return redirect('loginatalho')
 
 def cadastro_barbearia(request):
+    # Verifica se o usuário está logado
     if not request.session.get('logado'):
         return redirect('loginatalho')
     
     try:
+        
         usuario = Usuario.objects.get(id=request.session['usuario_id'])
+        
         
         if hasattr(usuario, 'barbearia'):
             messages.warning(request, 'Você já possui uma barbearia cadastrada!')
@@ -257,22 +253,17 @@ def cadastro_barbearia(request):
 
     if request.method == 'POST':
         try:
-            # Cria a barbearia (MANEIRA CORRETA)
-            barbearia = Barbearia(
-                usuario=usuario,
+            # Cria a barbearia associada ao usuário existente
+            barbearia = Barbearia.objects.create(
+                usuario=usuario,  # Associa ao usuário logado
                 nome_barbearia=request.POST['nome_barbearia'],
                 telefone_comercial=request.POST['telefone_comercial'],
                 endereco=request.POST['endereco'],
                 cidade=request.POST['cidade'],
                 estado=request.POST['estado'],
+                foto_logo=request.FILES.get('logo-upload'),
                 status_barbearia=request.POST.get('status_barbearia', 'aberto')
             )
-            
-            # Salva o logo se foi enviado
-            if 'logo-upload' in request.FILES:
-                barbearia.foto_logo = request.FILES['logo-upload']
-            
-            barbearia.save()
 
             # Atualiza o tipo do usuário para barbearia
             if usuario.tipo != 'barbearia':
@@ -286,6 +277,7 @@ def cadastro_barbearia(request):
             print(f"Erro ao cadastrar barbearia: {str(e)}")
             messages.error(request, f'Erro ao cadastrar barbearia: {str(e)}')
     
+    # Contexto para o template
     context = {
         'usuario': usuario,
         'nome_completo': f"{usuario.nome} {usuario.sobrenome}",
@@ -339,26 +331,22 @@ def minha_barbearia(request):
 
     if request.method == 'POST':
         if 'excluir_barbearia' in request.POST:
-            # Remove o logo se existir (MANEIRA CORRETA)
-            if barbearia.foto_logo:
-                barbearia.foto_logo.delete(save=False)
             barbearia.delete()
             messages.success(request, "Barbearia excluída com sucesso!")
             return redirect('barbeiroatalho')
         
         try:
+            
             barbearia.nome_barbearia = request.POST['nome_barbearia']
             barbearia.telefone_comercial = request.POST['telefone_comercial']
             barbearia.endereco = request.POST['endereco']
             barbearia.cidade = request.POST['cidade']
             barbearia.estado = request.POST['estado']
+            
+            
             barbearia.status_barbearia = request.POST.get('status_barbearia', 'aberto')
             
-            # Atualiza o logo se foi enviado (MANEIRA CORRETA)
             if 'logo-upload' in request.FILES:
-                # Remove o logo antigo se existir
-                if barbearia.foto_logo:
-                    barbearia.foto_logo.delete(save=False)
                 barbearia.foto_logo = request.FILES['logo-upload']
             
             barbearia.save()
@@ -733,3 +721,63 @@ def buscar_meu_horario_estimado(request):
         return JsonResponse({
             'error': str(e)
         }, status=500)
+        
+@csrf_exempt
+def alterar_tema(request):
+    """Altera entre tema claro e escuro"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            tema = data.get('tema', 'claro')
+            
+            # Recupera ou inicializa as configurações
+            config = request.session.get('config_acessibilidade', {})
+            config['tema'] = tema
+            request.session['config_acessibilidade'] = config
+            request.session.modified = True
+            
+            return JsonResponse({
+                'status': 'success', 
+                'tema': tema,
+                'message': 'Tema alterado com sucesso!'
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    
+    return JsonResponse({'status': 'error', 'message': 'Método não permitido'})
+
+@csrf_exempt
+def alterar_tamanho_fonte(request):
+    """Altera o tamanho da fonte"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            tamanho = data.get('tamanho', 'medio')
+            
+            # Valida o tamanho
+            tamanhos_validos = ['pequeno', 'medio', 'grande', 'muito_grande']
+            if tamanho not in tamanhos_validos:
+                return JsonResponse({'status': 'error', 'message': 'Tamanho inválido'})
+            
+            # Recupera ou inicializa as configurações
+            config = request.session.get('config_acessibilidade', {})
+            config['tamanho_fonte'] = tamanho
+            request.session['config_acessibilidade'] = config
+            request.session.modified = True
+            
+            return JsonResponse({
+                'status': 'success', 
+                'tamanho_fonte': tamanho,
+                'message': 'Tamanho da fonte alterado com sucesso!'
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    
+    return JsonResponse({'status': 'error', 'message': 'Método não permitido'})
+
+def resetar_acessibilidade(request):
+    """Reseta todas as configurações de acessibilidade"""
+    if 'config_acessibilidade' in request.session:
+        del request.session['config_acessibilidade']
+    
+    return JsonResponse({'status': 'success', 'message': 'Configurações resetadas!'})

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" data-tema="{{ config_acessibilidade.tema|default:'claro' }}" data-tamanho-fonte="{{ config_acessibilidade.tamanho_fonte|default:'medio' }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,21 +10,105 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
+    }
+
+    /* Variáveis CSS para temas */
+    :root[data-tema="claro"] {
+      --cor-fundo: #f8fafc;
+      --cor-texto: #1e293b;
+      --cor-primaria: #007bff;
+      --cor-secundaria: #6c757d;
+      --cor-borda: #e2e8f0;
+      --cor-navbar: #ffffff;
+      --cor-navbar-texto: #000000;
+      --cor-card: rgba(0, 0, 20, 0.7);
+      --cor-overlay: rgba(0, 0, 0, 0.7);
+      --cor-dropdown: #ffffff;
+      --cor-dropdown-texto: #000000;
+      --cor-dropdown-hover: #f1f1f1;
+      --cor-widget: #ffffff;
+      --cor-widget-texto: #1e293b;
+      --cor-widget-hover: #f8f9fa;
+      --gradiente-primario: linear-gradient(135deg, #2aa745, #34ce57);
+      --cor-bolinha: #2aa745;
+      --cor-bolinha-hover: #228c3a;
+      --cor-sombra: rgba(0, 0, 0, 0.05);
+      --cor-input-bg: #f8fafc;
+      --cor-input-text: #1e293b;
+    }
+
+    :root[data-tema="escuro"] {
+      --cor-fundo: #1a1a1a;
+      --cor-texto: #e0e0e0;
+      --cor-primaria: #0d6efd;
+      --cor-secundaria: #6c757d;
+      --cor-borda: #495057;
+      --cor-navbar: #2d2d2d;
+      --cor-navbar-texto: #ffffff;
+      --cor-card: rgba(30, 30, 60, 0.8);
+      --cor-overlay: rgba(0, 0, 0, 0.8);
+      --cor-dropdown: #2d2d2d;
+      --cor-dropdown-texto: #ffffff;
+      --cor-dropdown-hover: #3d3d3d;
+      --cor-widget: #2d2d2d;
+      --cor-widget-texto: #ffffff;
+      --cor-widget-hover: #3d3d3d;
+      --gradiente-primario: linear-gradient(135deg, #2aa745, #28a745);
+      --cor-bolinha: #2aa745;
+      --cor-bolinha-hover: #34ce57;
+      --cor-sombra: rgba(0, 0, 0, 0.3);
+      --cor-input-bg: #2d2d2d;
+      --cor-input-text: #ffffff;
+    }
+
+    /* Tamanhos de fonte */
+    :root[data-tamanho-fonte="pequeno"] {
+      --tamanho-fonte: 12px;
+      --tamanho-h1: 1.5rem;
+      --tamanho-h2: 1.3rem;
+      --tamanho-h3: 1.1rem;
+      --tamanho-p: 0.9rem;
+    }
+
+    :root[data-tamanho-fonte="medio"] {
+      --tamanho-fonte: 16px;
+      --tamanho-h1: 2rem;
+      --tamanho-h2: 1.5rem;
+      --tamanho-h3: 1.2rem;
+      --tamanho-p: 0.95rem;
+    }
+
+    :root[data-tamanho-fonte="grande"] {
+      --tamanho-fonte: 20px;
+      --tamanho-h1: 2.5rem;
+      --tamanho-h2: 2rem;
+      --tamanho-h3: 1.5rem;
+      --tamanho-p: 1.1rem;
+    }
+
+    :root[data-tamanho-fonte="muito_grande"] {
+      --tamanho-fonte: 24px;
+      --tamanho-h1: 3rem;
+      --tamanho-h2: 2.5rem;
+      --tamanho-h3: 1.8rem;
+      --tamanho-p: 1.3rem;
     }
 
     body {
-      background-color: #f8fafc;
-      color: #1e293b;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+      font-size: var(--tamanho-fonte);
+      transition: all 0.3s ease;
       padding: 20px;
     }
 
     .container {
       max-width: 1000px;
       margin: 0 auto;
-      background: white;
+      background: var(--cor-widget);
       border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 6px var(--cor-sombra);
       padding: 30px;
     }
 
@@ -32,11 +116,184 @@
       text-align: center;
       margin-bottom: 30px;
       font-family: 'Unbounded', cursive;
-      font-size: 24px;
-      color: #22c55e;
+      font-size: var(--tamanho-h1);
+      font-weight: bold;
     }
 
-    /* Seção de Foto Centralizada */
+    .logo {
+      color: var(--cor-texto);
+      font-weight: bold;
+    }
+
+    .R {
+      color: #1DB954;
+    }
+
+    /* Bolinha de Acessibilidade */
+    .bolinha-acessibilidade {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background: var(--cor-bolinha);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1001;
+      box-shadow: 0 4px 20px var(--cor-sombra);
+      transition: all 0.3s ease;
+      border: none;
+      color: white;
+      font-size: 24px;
+    }
+
+    .bolinha-acessibilidade:hover {
+      transform: scale(1.1);
+      background: var(--cor-bolinha-hover);
+      box-shadow: 0 6px 25px var(--cor-sombra);
+    }
+
+    .bolinha-acessibilidade.ativo {
+      transform: rotate(45deg);
+      background: var(--cor-bolinha-hover);
+    }
+
+    /* Menu de Acessibilidade */
+    .menu-acessibilidade {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      background: var(--cor-widget);
+      border: 1px solid var(--cor-borda);
+      border-radius: 15px;
+      padding: 20px;
+      z-index: 1000;
+      box-shadow: 0 8px 30px var(--cor-sombra);
+      backdrop-filter: blur(10px);
+      transform: scale(0.8);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      min-width: 200px;
+    }
+
+    .menu-acessibilidade.aberto {
+      transform: scale(1);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .menu-conteudo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .menu-titulo {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--cor-widget-texto);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .menu-botoes {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+
+    .botao-acessibilidade {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 8px;
+      background: var(--gradiente-primario);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      min-height: 60px;
+      gap: 5px;
+      box-shadow: 0 4px 10px rgba(42, 167, 69, 0.3);
+    }
+
+    .botao-acessibilidade:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(42, 167, 69, 0.4);
+    }
+
+    .botao-acessibilidade .icone {
+      font-size: 18px;
+    }
+
+    .botao-acessibilidade .texto {
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Efeito de pulso na bolinha */
+    .bolinha-acessibilidade.pulsando {
+      animation: pulse 2s infinite;
+    }
+
+    @media (max-width: 768px) {
+      /* Ajustes para a bolinha de acessibilidade em mobile */
+      .bolinha-acessibilidade {
+        width: 70px;
+        height: 70px;
+        bottom: 25px;
+        right: 25px;
+        font-size: 28px;
+      }
+
+      .menu-acessibilidade {
+        bottom: 110px;
+        right: 25px;
+        min-width: 180px;
+        padding: 15px;
+      }
+
+      .menu-botoes {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .botao-acessibilidade {
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 12px 15px;
+        min-height: 50px;
+        gap: 12px;
+      }
+
+      .botao-acessibilidade .icone {
+        font-size: 20px;
+      }
+
+      .botao-acessibilidade .texto {
+        font-size: 12px;
+      }
+    }
+
+    /* Resto do CSS permanece igual com as variáveis */
     .photo-section {
       display: flex;
       flex-direction: column;
@@ -64,24 +321,24 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background-color: #e2e8f0;
+      background-color: var(--cor-input-bg);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 36px;
-      color: #64748b;
-      border: 2px dashed #94a3b8;
+      color: var(--cor-secundaria);
+      border: 2px dashed var(--cor-borda);
       cursor: pointer;
       transition: all 0.3s;
     }
 
     .photo-placeholder:hover {
       border-color: #22c55e;
-      background-color: #f1f5f9;
+      background-color: var(--cor-widget-hover);
     }
 
     .photo-text {
-      color: #64748b;
+      color: var(--cor-secundaria);
       font-weight: 600;
       text-align: center;
       margin-top: 10px;
@@ -130,18 +387,19 @@
       display: block;
       margin-bottom: 8px;
       font-weight: 600;
-      color: #334155;
+      color: var(--cor-texto);
     }
 
     .form-group input,
     .form-group select {
       width: 100%;
       padding: 12px 15px;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--cor-borda);
       border-radius: 8px;
       font-size: 15px;
       transition: all 0.2s;
-      background-color: #f8fafc;
+      background-color: var(--cor-input-bg);
+      color: var(--cor-input-text);
     }
 
     .form-group input:focus,
@@ -160,7 +418,7 @@
     .status-title {
       font-weight: 600;
       margin-bottom: 15px;
-      color: #334155;
+      color: var(--cor-texto);
     }
 
     .status-buttons {
@@ -249,7 +507,7 @@
     }
 
     .btn-cancelar {
-      background-color: #64748b;
+      background-color: var(--cor-secundaria);
       color: white;
       box-shadow: 0 2px 5px rgba(100, 116, 139, 0.2);
     }
@@ -263,14 +521,14 @@
     .excluir-section {
       margin-top: 40px;
       padding-top: 30px;
-      border-top: 1px solid #e2e8f0;
+      border-top: 1px solid var(--cor-borda);
       text-align: center;
     }
 
     .excluir-title {
       font-weight: 600;
       margin-bottom: 15px;
-      color: #334155;
+      color: var(--cor-texto);
     }
 
     .excluir-warning {
@@ -315,7 +573,7 @@
     }
 
     .modal-content {
-      background: white;
+      background: var(--cor-widget);
       padding: 30px;
       border-radius: 12px;
       width: 90%;
@@ -327,11 +585,11 @@
       font-size: 1.25rem;
       font-weight: 600;
       margin-bottom: 1rem;
-      color: #1e293b;
+      color: var(--cor-texto);
     }
 
     .modal-message {
-      color: #64748b;
+      color: var(--cor-secundaria);
       margin-bottom: 1.5rem;
       line-height: 1.5;
     }
@@ -362,7 +620,7 @@
     }
 
     .modal-btn.cancel {
-      background-color: #64748b;
+      background-color: var(--cor-secundaria);
       color: white;
     }
 
@@ -422,8 +680,42 @@
   </style>
 </head>
 <body>
+  <!-- Bolinha de Acessibilidade -->
+  <button class="bolinha-acessibilidade pulsando" onclick="toggleMenuAcessibilidade()" title="Acessibilidade">
+    ♿
+  </button>
+
+  <!-- Menu de Acessibilidade -->
+  <div class="menu-acessibilidade" id="menuAcessibilidade">
+    <div class="menu-conteudo">
+      <div class="menu-titulo">Acessibilidade</div>
+      <div class="menu-botoes">
+        <button class="botao-acessibilidade" onclick="alternarTema()">
+          <span class="icone">🌓</span>
+          <span class="texto">Tema</span>
+        </button>
+        <button class="botao-acessibilidade" onclick="aumentarFonte()">
+          <span class="icone">A+</span>
+          <span class="texto">Aumentar Fonte</span>
+        </button>
+        <button class="botao-acessibilidade" onclick="diminuirFonte()">
+          <span class="icone">A-</span>
+          <span class="texto">Diminuir Fonte</span>
+        </button>
+        <button class="botao-acessibilidade" onclick="resetarAcessibilidade()">
+          <span class="icone">↻</span>
+          <span class="texto">Resetar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="container">
-    <div class="header">R<span style="color: #000;">egua</span></div>
+    <div class="header">
+      <div class="logo">
+        <span class="R">R</span>egua
+      </div>
+    </div>
 
     <!-- Mensagens -->
     <div class="alert-messages">
@@ -549,6 +841,128 @@
   </div>
 
   <script>
+    // Funções de Acessibilidade
+    function toggleMenuAcessibilidade() {
+      const menu = document.getElementById('menuAcessibilidade');
+      const bolinha = document.querySelector('.bolinha-acessibilidade');
+      
+      menu.classList.toggle('aberto');
+      bolinha.classList.toggle('ativo');
+      bolinha.classList.remove('pulsando');
+      
+      // Fecha o menu se clicar fora dele
+      if (menu.classList.contains('aberto')) {
+        setTimeout(() => {
+          document.addEventListener('click', fecharMenuAoClicarFora);
+        }, 100);
+      } else {
+        document.removeEventListener('click', fecharMenuAoClicarFora);
+      }
+    }
+
+    function fecharMenuAoClicarFora(event) {
+      const menu = document.getElementById('menuAcessibilidade');
+      const bolinha = document.querySelector('.bolinha-acessibilidade');
+      
+      if (!menu.contains(event.target) && !bolinha.contains(event.target)) {
+        menu.classList.remove('aberto');
+        bolinha.classList.remove('ativo');
+        document.removeEventListener('click', fecharMenuAoClicarFora);
+      }
+    }
+
+    function alternarTema() {
+      const temaAtual = document.documentElement.getAttribute('data-tema');
+      const novoTema = temaAtual === 'claro' ? 'escuro' : 'claro';
+      
+      fetch('{% url "alterar_tema" %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify({tema: novoTema})
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          document.documentElement.setAttribute('data-tema', novoTema);
+        }
+      });
+      
+      // Fecha o menu após a ação
+      toggleMenuAcessibilidade();
+    }
+
+    function aumentarFonte() {
+      const tamanhos = ['pequeno', 'medio', 'grande', 'muito_grande'];
+      const atual = document.documentElement.getAttribute('data-tamanho-fonte');
+      const indexAtual = tamanhos.indexOf(atual);
+      const novoIndex = Math.min(indexAtual + 1, tamanhos.length - 1);
+      
+      if (indexAtual !== novoIndex) {
+        alterarTamanhoFonte(tamanhos[novoIndex]);
+      }
+    }
+
+    function diminuirFonte() {
+      const tamanhos = ['pequeno', 'medio', 'grande', 'muito_grande'];
+      const atual = document.documentElement.getAttribute('data-tamanho-fonte');
+      const indexAtual = tamanhos.indexOf(atual);
+      const novoIndex = Math.max(indexAtual - 1, 0);
+      
+      if (indexAtual !== novoIndex) {
+        alterarTamanhoFonte(tamanhos[novoIndex]);
+      }
+    }
+
+    function alterarTamanhoFonte(tamanho) {
+      fetch('{% url "alterar_tamanho_fonte" %}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify({tamanho: tamanho})
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          document.documentElement.setAttribute('data-tamanho-fonte', tamanho);
+        }
+      });
+    }
+
+    function resetarAcessibilidade() {
+      fetch('{% url "resetar_acessibilidade" %}')
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          document.documentElement.setAttribute('data-tema', 'claro');
+          document.documentElement.setAttribute('data-tamanho-fonte', 'medio');
+        }
+      });
+      
+      // Fecha o menu após a ação
+      toggleMenuAcessibilidade();
+    }
+
+    function getCSRFToken() {
+      const name = 'csrftoken';
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
     // Máscara para telefone
     document.getElementById('telefone_comercial').addEventListener('input', function(e) {
       let value = e.target.value.replace(/\D/g, '');
@@ -665,6 +1079,14 @@
         e.preventDefault();
       }
     });
+
+    // Para de pulsar a bolinha depois de 10 segundos
+    setTimeout(() => {
+      const bolinha = document.querySelector('.bolinha-acessibilidade');
+      if (bolinha) {
+        bolinha.classList.remove('pulsando');
+      }
+    }, 10000);
   </script>
 </body>
 </html>

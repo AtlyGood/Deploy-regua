@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" data-tema="{{ config_acessibilidade.tema|default:'claro' }}" data-tamanho-fonte="{{ config_acessibilidade.tamanho_fonte|default:'medio' }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -13,17 +13,96 @@
       box-sizing: border-box;
     }
 
+    /* Variáveis CSS para temas */
+    :root[data-tema="claro"] {
+      --cor-fundo: #ffffff;
+      --cor-texto: #ffffff;
+      --cor-primaria: #007bff;
+      --cor-secundaria: #6c757d;
+      --cor-borda: #dee2e6;
+      --cor-navbar: #ffffff;
+      --cor-navbar-texto: #000000;
+      --cor-card: rgba(0, 0, 20, 0.7);
+      --cor-overlay: rgba(0, 0, 0, 0.7);
+      --cor-dropdown: #ffffff;
+      --cor-dropdown-texto: #000000;
+      --cor-dropdown-hover: #f1f1f1;
+      --cor-widget: #ffffff;
+      --cor-widget-texto: #333333;
+      --cor-widget-hover: #f8f9fa;
+      --gradiente-primario: linear-gradient(135deg, #2aa745, #34ce57);
+      --cor-bolinha: #2aa745;
+      --cor-bolinha-hover: #228c3a;
+      --cor-sombra: rgba(0, 0, 0, 0.1);
+    }
+
+    :root[data-tema="escuro"] {
+      --cor-fundo: #1a1a1a;
+      --cor-texto: #ffffff;
+      --cor-primaria: #0d6efd;
+      --cor-secundaria: #6c757d;
+      --cor-borda: #495057;
+      --cor-navbar: #2d2d2d;
+      --cor-navbar-texto: #ffffff;
+      --cor-card: rgba(30, 30, 60, 0.8);
+      --cor-overlay: rgba(0, 0, 0, 0.8);
+      --cor-dropdown: #2d2d2d;
+      --cor-dropdown-texto: #ffffff;
+      --cor-dropdown-hover: #3d3d3d;
+      --cor-widget: #2d2d2d;
+      --cor-widget-texto: #ffffff;
+      --cor-widget-hover: #3d3d3d;
+      --gradiente-primario: linear-gradient(135deg, #2aa745, #28a745);
+      --cor-bolinha: #2aa745;
+      --cor-bolinha-hover: #34ce57;
+      --cor-sombra: rgba(0, 0, 0, 0.3);
+    }
+
+    /* Tamanhos de fonte */
+    :root[data-tamanho-fonte="pequeno"] {
+      --tamanho-fonte: 12px;
+      --tamanho-h1: 1.5rem;
+      --tamanho-h2: 1.3rem;
+      --tamanho-h3: 1.1rem;
+      --tamanho-p: 0.9rem;
+    }
+
+    :root[data-tamanho-fonte="medio"] {
+      --tamanho-fonte: 16px;
+      --tamanho-h1: 2rem;
+      --tamanho-h2: 1.5rem;
+      --tamanho-h3: 1.2rem;
+      --tamanho-p: 0.95rem;
+    }
+
+    :root[data-tamanho-fonte="grande"] {
+      --tamanho-fonte: 20px;
+      --tamanho-h1: 2.5rem;
+      --tamanho-h2: 2rem;
+      --tamanho-h3: 1.5rem;
+      --tamanho-p: 1.1rem;
+    }
+
+    :root[data-tamanho-fonte="muito_grande"] {
+      --tamanho-fonte: 24px;
+      --tamanho-h1: 3rem;
+      --tamanho-h2: 2.5rem;
+      --tamanho-h3: 1.8rem;
+      --tamanho-p: 1.3rem;
+    }
 
     body {
       font-family: 'Unbounded', sans-serif;
       background: url('https://blog.sobrebarba.com.br/wp-content/uploads/2022/09/140_header_barbearia-de-cuba_7108e54c-0dc8-48a4-a6ad-4da3a6d42014_3000x.webp');
-      color: #fff;
+      color: var(--cor-texto);
+      font-size: var(--tamanho-fonte);
+      transition: all 0.3s ease;
     }
 
     /* Navbar */
     nav {
-      background-color: #fff;
-      color: #000;
+      background-color: var(--cor-navbar);
+      color: var(--cor-navbar-texto);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -34,8 +113,8 @@
     }
 
     .logo {
-      font-size: 1.5rem;
-      color: #000000;
+      font-size: var(--tamanho-h2);
+      color: var(--cor-navbar-texto);
       font-weight: bold;
     }
 
@@ -46,15 +125,18 @@
     }
 
     .nav-links a {
-      color: #000;
+      color: var(--cor-navbar-texto);
       text-decoration: none;
       font-weight: bold;
     }
 
     .menu-icon {
-      font-size: 1.5rem;
+      font-size: var(--tamanho-h2);
       display: none;
       cursor: pointer;
+      background: none;
+      border: none;
+      color: var(--cor-navbar-texto);
     }
 
     /* Hero Section */
@@ -69,7 +151,7 @@
     .overlay {
       position: absolute;
       inset: 0;
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: var(--cor-overlay);
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
@@ -83,24 +165,24 @@
     }
 
     .card {
-      background-color: rgba(0, 0, 20, 0.7);
+      background-color: var(--cor-card);
       padding: 1.5rem;
       border-left: 4px solid #1DB954;
     }
 
     .card_right{
-        background-color: rgba(0, 0, 20, 0.7);
+        background-color: var(--cor-card);
         padding: 1.5rem;
     }
 
     .card h3 {
       margin-bottom: 1rem;
       color: #1DB954;
-      font-size: 1.2rem;
+      font-size: var(--tamanho-h3);
     }
 
     .card p, .card li {
-      font-size: 0.95rem;
+      font-size: var(--tamanho-p);
       line-height: 1.6;
     }
 
@@ -117,9 +199,9 @@
     /* Dropdown Button */
     .dropbtn {
       background-color: transparent;
-      color: #000;
+      color: var(--cor-navbar-texto);
       padding: 0.5rem 1rem;
-      font-size: 1rem;
+      font-size: var(--tamanho-p);
       border: none;
       cursor: pointer;
       font-weight: bold;
@@ -137,7 +219,7 @@
       display: none;
       position: absolute;
       right: 0;
-      background-color: #fff;
+      background-color: var(--cor-dropdown);
       min-width: 160px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
       z-index: 1;
@@ -145,16 +227,17 @@
 
     /* Links inside the dropdown */
     .dropdown-content a {
-      color: #000;
+      color: var(--cor-dropdown-texto);
       padding: 12px 16px;
       text-decoration: none;
       display: block;
       text-align: left;
+      font-size: var(--tamanho-p);
     }
 
     /* Change color of dropdown links on hover */
     .dropdown-content a:hover {
-      background-color: #f1f1f1;
+      background-color: var(--cor-dropdown-hover);
     }
 
     /* Show the dropdown menu on hover */
@@ -199,6 +282,237 @@
       background-position: center;
     }
 
+    /* Bolinha de Acessibilidade */
+    .bolinha-acessibilidade {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background: var(--cor-bolinha);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1001;
+      box-shadow: 0 4px 20px var(--cor-sombra);
+      transition: all 0.3s ease;
+      border: none;
+      color: white;
+      font-size: 24px;
+    }
+
+    .bolinha-acessibilidade:hover {
+      transform: scale(1.1);
+      background: var(--cor-bolinha-hover);
+      box-shadow: 0 6px 25px var(--cor-sombra);
+    }
+
+    .bolinha-acessibilidade.ativo {
+      transform: rotate(45deg);
+      background: var(--cor-bolinha-hover);
+    }
+
+    /* Menu de Acessibilidade */
+    .menu-acessibilidade {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      background: var(--cor-widget);
+      border: 1px solid var(--cor-borda);
+      border-radius: 15px;
+      padding: 20px;
+      z-index: 1000;
+      box-shadow: 0 8px 30px var(--cor-sombra);
+      backdrop-filter: blur(10px);
+      transform: scale(0.8);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      min-width: 200px;
+    }
+
+    .menu-acessibilidade.aberto {
+      transform: scale(1);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .menu-conteudo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .menu-titulo {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--cor-widget-texto);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .menu-botoes {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+
+    .botao-acessibilidade {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 8px;
+      background: var(--gradiente-primario);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      min-height: 60px;
+      gap: 5px;
+      box-shadow: 0 4px 10px rgba(42, 167, 69, 0.3);
+    }
+
+    .botao-acessibilidade:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(42, 167, 69, 0.4);
+    }
+
+    .botao-acessibilidade .icone {
+      font-size: 18px;
+    }
+
+    .botao-acessibilidade .texto {
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    footer {
+      border-top: 1px solid var(--cor-borda);
+      height: 30px;
+    }
+
+    /* Efeito de pulso na bolinha */
+    .bolinha-acessibilidade.pulsando {
+      animation: pulse 2s infinite;
+    }
+
+    /* Menu Mobile */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--cor-navbar);
+      z-index: 999;
+      flex-direction: column;
+      padding: 2rem;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+
+    .mobile-menu.aberto {
+      transform: translateX(0);
+    }
+
+    .mobile-menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--cor-borda);
+    }
+
+    .mobile-menu-close {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      color: var(--cor-navbar-texto);
+      cursor: pointer;
+    }
+
+    .mobile-menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .mobile-menu-links a {
+      color: var(--cor-navbar-texto);
+      text-decoration: none;
+      font-size: var(--tamanho-h3);
+      padding: 1rem;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    .mobile-menu-links a:hover {
+      background-color: var(--cor-dropdown-hover);
+    }
+
+    .mobile-profile {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-top: 1px solid var(--cor-borda);
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      border-radius: 8px;
+    }
+
+    .mobile-profile:hover {
+      background-color: var(--cor-dropdown-hover);
+    }
+
+    .mobile-profile-pic {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #ddd;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.3s ease;
+    }
+
+    .mobile-profile:hover .mobile-profile-pic {
+      transform: scale(1.1);
+    }
+
+    .mobile-profile-name {
+      color: var(--cor-navbar-texto);
+      font-size: var(--tamanho-p);
+    }
+
     @media (max-width: 768px) {
       .nav-links {
         display: none;
@@ -208,16 +522,144 @@
         display: block;
       }
 
+      .mobile-menu {
+        display: flex;
+      }
+
       .info-grid {
         grid-template-columns: 1fr;
       }
-      .profile-icon {
-        margin-left: 1rem;
+
+      /* Ajustes para a bolinha de acessibilidade em mobile */
+      .bolinha-acessibilidade {
+        width: 70px;
+        height: 70px;
+        bottom: 25px;
+        right: 25px;
+        font-size: 28px;
+      }
+
+      .menu-acessibilidade {
+        bottom: 110px;
+        right: 25px;
+        min-width: 180px;
+        padding: 15px;
+      }
+
+      .menu-botoes {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .botao-acessibilidade {
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 12px 15px;
+        min-height: 50px;
+        gap: 12px;
+      }
+
+      .botao-acessibilidade .icone {
+        font-size: 20px;
+      }
+
+      .botao-acessibilidade .texto {
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .title {
+        font-size: 20px;
+        letter-spacing: 6px;
+      }
+
+      .bolinha-acessibilidade {
+        width: 65px;
+        height: 65px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 26px;
+      }
+
+      .menu-acessibilidade {
+        bottom: 100px;
+        right: 20px;
+        min-width: 170px;
+      }
+    }
+
+    /* Para telas muito pequenas */
+    @media (max-width: 360px) {
+      .menu-acessibilidade {
+        right: 10px;
+        left: 10px;
+        min-width: auto;
       }
     }
   </style>
 </head>
 <body>
+
+  <!-- Bolinha de Acessibilidade -->
+  <button class="bolinha-acessibilidade pulsando" onclick="toggleMenuAcessibilidade()" title="Acessibilidade">
+    ♿
+  </button>
+
+  <!-- Menu de Acessibilidade -->
+  <div class="menu-acessibilidade" id="menuAcessibilidade">
+    <div class="menu-conteudo">
+      <div class="menu-titulo">Acessibilidade</div>
+      <div class="menu-botoes">
+        <button class="botao-acessibilidade" onclick="alternarTema()">
+          <span class="icone">🌓</span>
+          <span class="texto">Tema</span>
+        </button>
+        <button class="botao-acessibilidade" onclick="aumentarFonte()">
+          <span class="icone">A+</span>
+          <span class="texto">Aumentar Fonte</span>
+        </button>
+        <button class="botao-acessibilidade" onclick="diminuirFonte()">
+          <span class="icone">A-</span>
+          <span class="texto">Diminuir Fonte</span>
+        </button>
+        <button class="botao-acessibilidade" onclick="resetarAcessibilidade()">
+          <span class="icone">↻</span>
+          <span class="texto">Resetar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Mobile -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+      <div class="logo">
+        <span class="R">R</span>egua
+      </div>
+      <button class="mobile-menu-close" onclick="fecharMenuMobile()">×</button>
+    </div>
+    
+    <div class="mobile-menu-links">
+      <a href="{% url 'barbeariaatalho' %}">Barbearias Disponíveis</a>
+      <a href="{% url 'agendamento_clienteatalho' %}">Meus Agendamentos</a>
+      <a href="{% url 'logout' %}" style="color: #ff4d4d;">Sair</a>
+    </div>
+    
+    <!-- Perfil clicável na parte inferior -->
+    <a href="{% url 'perfilatalho' %}" class="mobile-profile" onclick="fecharMenuMobile()">
+      <div class="mobile-profile-pic" id="mobileProfilePic" 
+        {% if foto_url %}style="background-image: url('{{ foto_url }}')"{% endif %}>
+      </div>
+      <div class="mobile-profile-name">
+        {% if user.first_name %}
+          {{ user.first_name }} {{ user.last_name }}
+        {% else %}
+          Meu Perfil
+        {% endif %}
+      </div>
+    </a>
+  </div>
 
 <nav>
     <div class="logo">
@@ -226,24 +668,24 @@
         </a>
     </div>
     
-    <div class="nav-links">
+    <div class="nav-links" id="navLinks">
         <div class="dropdown">
             <button class="dropbtn">☰ Menu</button>
             <div class="dropdown-content">
                 <a href="{% url 'barbeariaatalho' %}">Barbearias Disponíveis</a>
-                <a href="{%  url 'agendamento_clienteatalho' %}">Meus Agendamentos</a>
+                <a href="{% url 'agendamento_clienteatalho' %}">Meus Agendamentos</a>
                 <a href="{% url 'logout' %}" style="color: #ff4d4d;">Sair</a>
             </div>
         </div>
         <!-- Ícone de perfil -->
         <a href="{% url 'perfilatalho' %}" class="profile-icon">
-    <div class="profile-pic-nav" id="profile-pic-nav" 
-      {% if foto_url %}style="background-image: url('{{ foto_url }}')"{% endif %}>
-    </div>
-</a>
+          <div class="profile-pic-nav" id="profile-pic-nav" 
+            {% if foto_url %}style="background-image: url('{{ foto_url }}')"{% endif %}>
+          </div>
+        </a>
     </div>
     
-    <div class="menu-icon">☰</div>
+    <button class="menu-icon" id="menuIcon" onclick="abrirMenuMobile()">☰</button>
 </nav>
 
   <!-- Hero Section -->
@@ -270,12 +712,52 @@
   </section>
 
   <script>
-    // Toggle do menu mobile
-    document.querySelector('.menu-icon').addEventListener('click', function() {
-      const navLinks = document.querySelector('.nav-links');
-      navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+    // Funções do Menu Mobile
+    function abrirMenuMobile() {
+      document.getElementById('mobileMenu').classList.add('aberto');
+      document.body.style.overflow = 'hidden'; // Previne scroll quando menu está aberto
+    }
+
+    function fecharMenuMobile() {
+      document.getElementById('mobileMenu').classList.remove('aberto');
+      document.body.style.overflow = 'auto'; // Restaura scroll
+    }
+
+    // Fecha o menu mobile ao clicar em um link
+    document.querySelectorAll('.mobile-menu-links a').forEach(link => {
+      link.addEventListener('click', fecharMenuMobile);
     });
-    
+
+    // Controle do menu de acessibilidade
+    function toggleMenuAcessibilidade() {
+      const menu = document.getElementById('menuAcessibilidade');
+      const bolinha = document.querySelector('.bolinha-acessibilidade');
+      
+      menu.classList.toggle('aberto');
+      bolinha.classList.toggle('ativo');
+      bolinha.classList.remove('pulsando');
+      
+      // Fecha o menu se clicar fora dele
+      if (menu.classList.contains('aberto')) {
+        setTimeout(() => {
+          document.addEventListener('click', fecharMenuAoClicarFora);
+        }, 100);
+      } else {
+        document.removeEventListener('click', fecharMenuAoClicarFora);
+      }
+    }
+
+    function fecharMenuAoClicarFora(event) {
+      const menu = document.getElementById('menuAcessibilidade');
+      const bolinha = document.querySelector('.bolinha-acessibilidade');
+      
+      if (!menu.contains(event.target) && !bolinha.contains(event.target)) {
+        menu.classList.remove('aberto');
+        bolinha.classList.remove('ativo');
+        document.removeEventListener('click', fecharMenuAoClicarFora);
+      }
+    }
+
     // Atualiza a foto de perfil quando houver mudanças
     function checkForProfilePhotoUpdates() {
         fetch('{% url "perfilatalho" %}')
@@ -287,12 +769,114 @@
                 
                 if (newPhotoUrl) {
                     document.getElementById('profile-pic-nav').style.backgroundImage = newPhotoUrl;
+                    document.getElementById('mobileProfilePic').style.backgroundImage = newPhotoUrl;
                 }
             });
     }
-    
+
+    // Funções de acessibilidade
+    function alternarTema() {
+        const temaAtual = document.documentElement.getAttribute('data-tema');
+        const novoTema = temaAtual === 'claro' ? 'escuro' : 'claro';
+        
+        fetch('{% url "alterar_tema" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: JSON.stringify({tema: novoTema})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                document.documentElement.setAttribute('data-tema', novoTema);
+            }
+        });
+        
+        // Fecha o menu após a ação
+        toggleMenuAcessibilidade();
+    }
+
+    function aumentarFonte() {
+        const tamanhos = ['pequeno', 'medio', 'grande', 'muito_grande'];
+        const atual = document.documentElement.getAttribute('data-tamanho-fonte');
+        const indexAtual = tamanhos.indexOf(atual);
+        const novoIndex = Math.min(indexAtual + 1, tamanhos.length - 1);
+        
+        if (indexAtual !== novoIndex) {
+            alterarTamanhoFonte(tamanhos[novoIndex]);
+        }
+    }
+
+    function diminuirFonte() {
+        const tamanhos = ['pequeno', 'medio', 'grande', 'muito_grande'];
+        const atual = document.documentElement.getAttribute('data-tamanho-fonte');
+        const indexAtual = tamanhos.indexOf(atual);
+        const novoIndex = Math.max(indexAtual - 1, 0);
+        
+        if (indexAtual !== novoIndex) {
+            alterarTamanhoFonte(tamanhos[novoIndex]);
+        }
+    }
+
+    function alterarTamanhoFonte(tamanho) {
+        fetch('{% url "alterar_tamanho_fonte" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: JSON.stringify({tamanho: tamanho})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                document.documentElement.setAttribute('data-tamanho-fonte', tamanho);
+            }
+        });
+    }
+
+    function resetarAcessibilidade() {
+        fetch('{% url "resetar_acessibilidade" %}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                document.documentElement.setAttribute('data-tema', 'claro');
+                document.documentElement.setAttribute('data-tamanho-fonte', 'medio');
+            }
+        });
+        
+        // Fecha o menu após a ação
+        toggleMenuAcessibilidade();
+    }
+
+    function getCSRFToken() {
+        const name = 'csrftoken';
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Para de pulsar a bolinha depois de 10 segundos
+    setTimeout(() => {
+      const bolinha = document.querySelector('.bolinha-acessibilidade');
+      if (bolinha) {
+        bolinha.classList.remove('pulsando');
+      }
+    }, 10000);
+
     // Verifica atualizações a cada 30 segundos (opcional)
     setInterval(checkForProfilePhotoUpdates, 30000);
-</script>
+  </script>
 </body>
 </html>
