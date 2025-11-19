@@ -15,7 +15,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-%5^o-hwktba25du5q8q1q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,.onrender.com').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,.onrender.com,.vercel.app,.railway.app').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -63,6 +63,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'regua.wsgi.application'
 
 # Database
+# ✅ CONFIGURAÇÃO ATUALIZADA - PostgreSQL no Render, SQLite localmente
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -73,6 +74,7 @@ DATABASES = {
 # Configuração PostgreSQL para produção (Render)
 if os.environ.get('DATABASE_URL'):
     DATABASES['default'] = dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
         conn_max_age=600,
         ssl_require=not DEBUG
     )
@@ -119,6 +121,10 @@ if os.path.exists(BASE_DIR / 'static'):
     ]
 else:
     STATICFILES_DIRS = []
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Configurações para WhiteNoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
