@@ -11,8 +11,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-%5^o-hwktba25du5q8q1q-m@x(7tp0#7cuginopxmt9rgbe*4%')
+
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,.vercel.app,.railway.app,.onrender.com').split(',')
+
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,.onrender.com').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -59,14 +62,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'regua.wsgi.application'
 
-# Database - CONFIGURAÇÃO SIMPLIFICADA E FUNCIONAL
+# Database
 DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+# Configuração PostgreSQL para produção (Render)
+if os.environ.get('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.config(
         conn_max_age=600,
         ssl_require=not DEBUG
     )
-}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -103,17 +112,13 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# ✅ CORREÇÃO: Verificar se a pasta static existe antes de adicionar
+# Verificar se a pasta static existe antes de adicionar
 if os.path.exists(BASE_DIR / 'static'):
     STATICFILES_DIRS = [
         BASE_DIR / 'static',
     ]
 else:
     STATICFILES_DIRS = []
-
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 
 # Configurações para WhiteNoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
