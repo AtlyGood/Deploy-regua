@@ -59,28 +59,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'regua.wsgi.application'
 
-# Database - CONFIGURAÇÃO CORRIGIDA E DEFINITIVA
+# Database - CONFIGURAÇÃO SIMPLIFICADA E FUNCIONAL
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-# ✅ CONFIGURAÇÃO AUTOMÁTICA - PostgreSQL no Render, SQLite localmente
-if os.environ.get('RENDER'):  # Render define esta variável automaticamente
-    # No Render - usar PostgreSQL
-    DATABASES['default'] = dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
+    'default': dj_database_url.config(
+        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=not DEBUG
     )
-else:
-    # Localmente - usar SQLite
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -116,9 +102,14 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
+
+# ✅ CORREÇÃO: Verificar se a pasta static existe antes de adicionar
+if os.path.exists(BASE_DIR / 'static'):
+    STATICFILES_DIRS = [
+        BASE_DIR / 'static',
+    ]
+else:
+    STATICFILES_DIRS = []
 
 # Media files
 MEDIA_URL = '/media/'
