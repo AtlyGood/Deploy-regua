@@ -10,12 +10,13 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
+# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-%5^o-hwktba25du5q8q1q-m@x(7tp0#7cuginopxmt9rgbe*4%')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,.onrender.com,.vercel.app,.railway.app').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,.vercel.app,.railway.app,.onrender.com').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -26,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'regua2',
+    # ADICIONE estas duas apps para Cloudinary
     'cloudinary',
     'cloudinary_storage',
 ]
@@ -63,7 +65,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'regua.wsgi.application'
 
 # Database
-# ✅ CONFIGURAÇÃO ATUALIZADA - PostgreSQL no Render, SQLite localmente
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -71,10 +72,9 @@ DATABASES = {
     }
 }
 
-# Configuração PostgreSQL para produção (Render)
+# Configuração do banco de dados para produção (se DATABASE_URL estiver definida)
 if os.environ.get('DATABASE_URL'):
     DATABASES['default'] = dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
         conn_max_age=600,
         ssl_require=not DEBUG
     )
@@ -97,32 +97,29 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = 'pt-br'
+
 TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_TZ = True
 
-# Cloudinary Configuration
+# Cloudinary Configuration - ADICIONE ESTA SEÇÃO
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dzucrvvpl'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '926736494999697'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', 'c5HhdXH7voS1CgN3Z-YhHYScmc4'),
 }
 
+# Storage configuration - ALTERE ESTA LINHA
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
-# Verificar se a pasta static existe antes de adicionar
-if os.path.exists(BASE_DIR / 'static'):
-    STATICFILES_DIRS = [
-        BASE_DIR / 'static',
-    ]
-else:
-    STATICFILES_DIRS = []
-
-# Media files
+# Media files - MANTENHA ASSIM (Cloudinary irá substituir)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
