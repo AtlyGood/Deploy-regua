@@ -142,12 +142,16 @@ def upload_foto_perfil(request):
         try:
             usuario = Usuario.objects.get(id=request.session['usuario_id'])
             
-            # Remove a lógica de exclusão de arquivo local
-            # O Cloudinary gerencia automaticamente
+            # Remove a foto antiga se existir
+            if usuario.foto_perfil:
+                if os.path.isfile(usuario.foto_perfil.path):
+                    os.remove(usuario.foto_perfil.path)
             
             # Salva a nova foto
             foto = request.FILES['foto_perfil']
-            usuario.foto_perfil = foto  # Cloudinary cuida do armazenamento
+            fs = FileSystemStorage()
+            filename = fs.save(f'perfil/user_{usuario.id}_{foto.name}', foto)
+            usuario.foto_perfil = filename
             usuario.save()
             
             return JsonResponse({'status': 'success', 'foto_url': usuario.foto_perfil.url})
@@ -195,8 +199,10 @@ def deletar_conta(request):
         try:
             usuario = Usuario.objects.get(id=request.session['usuario_id'])
             
-            # Remove a lógica de exclusão de arquivo físico
-            # O Cloudinary gerencia automaticamente o storage
+            # Remove a foto de perfil se existir
+            if usuario.foto_perfil:
+                if os.path.isfile(usuario.foto_perfil.path):
+                    os.remove(usuario.foto_perfil.path)
             
             usuario.delete()
             request.session.flush()

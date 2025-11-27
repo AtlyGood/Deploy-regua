@@ -3,121 +3,134 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Regua - Sistema para Barbearias</title>
+  <title>Regua - Sistema Completo para Barbearias</title>
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=Inter:wght@400;600&display=swap');
 
     /* Variáveis CSS para temas */
     :root[data-tema="claro"] {
+      --cor-primaria: #22c55e;
+      --cor-primaria-escura: #16a34a;
+      --cor-secundaria: #1e293b;
       --cor-fundo: #ffffff;
-      --cor-texto: #333333;
-      --cor-primaria: #007bff;
-      --cor-secundaria: #6c757d;
-      --cor-borda: #dee2e6;
+      --cor-fundo-secundario: #f8fafc;
+      --cor-texto: #1e293b;
+      --cor-texto-claro: #64748b;
+      --cor-borda: #e2e8f0;
       --cor-navbar: #ffffff;
-      --cor-navbar-texto: #000000;
-      --cor-card: rgba(0, 0, 20, 0.7);
+      --cor-navbar-texto: #1e293b;
+      --cor-card: #ffffff;
       --cor-overlay: rgba(0, 0, 0, 0.7);
-      --cor-dropdown: #ffffff;
-      --cor-dropdown-texto: #000000;
-      --cor-dropdown-hover: #f1f1f1;
-      --cor-widget: #ffffff;
-      --cor-widget-texto: #333333;
-      --cor-widget-hover: #f8f9fa;
-      --gradiente-primario: linear-gradient(135deg, #2aa745, #34ce57);
-      --cor-bolinha: #2aa745;
-      --cor-bolinha-hover: #228c3a;
-      --cor-sombra: rgba(0, 0, 0, 0.1);
-      --cor-hero-overlay: rgba(0, 0, 0, 0.7);
-      --cor-info-bg: #f8f9fa;
-      --cor-info-texto: #333333;
-      --cor-divisao: rgba(34, 197, 94, 0.2);
+      --cor-sombra: rgba(0, 0, 0, 0.08);
+      --cor-sombra-forte: rgba(0, 0, 0, 0.15);
+      --cor-bolinha: #22c55e;
+      --cor-bolinha-hover: #16a34a;
+      --gradiente-primario: linear-gradient(135deg, #22c55e, #16a34a);
+      --gradiente-hero: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(22, 163, 74, 0.8));
+      --cor-destaque: #dc2626;
+      --cor-sucesso: #059669;
     }
 
     :root[data-tema="escuro"] {
-      --cor-fundo: #1a1a1a;
-      --cor-texto: #ffffff;
-      --cor-primaria: #0d6efd;
-      --cor-secundaria: #6c757d;
-      --cor-borda: #495057;
-      --cor-navbar: #2d2d2d;
-      --cor-navbar-texto: #ffffff;
-      --cor-card: rgba(30, 30, 60, 0.8);
+      --cor-primaria: #22c55e;
+      --cor-primaria-escura: #16a34a;
+      --cor-secundaria: #0f172a;
+      --cor-fundo: #0f172a;
+      --cor-fundo-secundario: #1e293b;
+      --cor-texto: #f1f5f9;
+      --cor-texto-claro: #94a3b8;
+      --cor-borda: #334155;
+      --cor-navbar: #1e293b;
+      --cor-navbar-texto: #f1f5f9;
+      --cor-card: #1e293b;
       --cor-overlay: rgba(0, 0, 0, 0.8);
-      --cor-dropdown: #2d2d2d;
-      --cor-dropdown-texto: #ffffff;
-      --cor-dropdown-hover: #3d3d3d;
-      --cor-widget: #2d2d2d;
-      --cor-widget-texto: #ffffff;
-      --cor-widget-hover: #3d3d3d;
-      --gradiente-primario: linear-gradient(135deg, #2aa745, #28a745);
-      --cor-bolinha: #2aa745;
-      --cor-bolinha-hover: #34ce57;
       --cor-sombra: rgba(0, 0, 0, 0.3);
-      --cor-hero-overlay: rgba(0, 0, 0, 0.8);
-      --cor-info-bg: #111827;
-      --cor-info-texto: #ffffff;
-      --cor-divisao: rgba(34, 197, 94, 0.3);
+      --cor-sombra-forte: rgba(0, 0, 0, 0.5);
+      --cor-bolinha: #22c55e;
+      --cor-bolinha-hover: #16a34a;
+      --gradiente-primario: linear-gradient(135deg, #22c55e, #16a34a);
+      --gradiente-hero: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(22, 163, 74, 0.8));
+      --cor-destaque: #ef4444;
+      --cor-sucesso: #10b981;
     }
 
     /* Tamanhos de fonte */
     :root[data-tamanho-fonte="pequeno"] {
-      --tamanho-fonte: 12px;
-      --tamanho-h1: 1.5rem;
-      --tamanho-h2: 1.3rem;
-      --tamanho-h3: 1.1rem;
+      --tamanho-fonte: 14px;
+      --tamanho-h1: 1.8rem;
+      --tamanho-h2: 1.5rem;
+      --tamanho-h3: 1.3rem;
       --tamanho-p: 0.9rem;
     }
 
     :root[data-tamanho-fonte="medio"] {
       --tamanho-fonte: 16px;
-      --tamanho-h1: 2rem;
-      --tamanho-h2: 1.5rem;
-      --tamanho-h3: 1.2rem;
-      --tamanho-p: 0.95rem;
-    }
-
-    :root[data-tamanho-fonte="grande"] {
-      --tamanho-fonte: 20px;
       --tamanho-h1: 2.5rem;
       --tamanho-h2: 2rem;
       --tamanho-h3: 1.5rem;
+      --tamanho-p: 1rem;
+    }
+
+    :root[data-tamanho-fonte="grande"] {
+      --tamanho-fonte: 18px;
+      --tamanho-h1: 3rem;
+      --tamanho-h2: 2.5rem;
+      --tamanho-h3: 1.8rem;
       --tamanho-p: 1.1rem;
     }
 
     :root[data-tamanho-fonte="muito_grande"] {
-      --tamanho-fonte: 24px;
-      --tamanho-h1: 3rem;
-      --tamanho-h2: 2.5rem;
-      --tamanho-h3: 1.8rem;
+      --tamanho-fonte: 20px;
+      --tamanho-h1: 3.5rem;
+      --tamanho-h2: 3rem;
+      --tamanho-h3: 2rem;
       --tamanho-p: 1.3rem;
     }
 
-    body {
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
       font-family: 'Inter', sans-serif;
       background-color: var(--cor-fundo);
       color: var(--cor-texto);
       font-size: var(--tamanho-fonte);
+      line-height: 1.6;
       transition: all 0.3s ease;
     }
 
-    /* Navbar */
+    /* Navbar Modernizada */
     nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
       background-color: var(--cor-navbar);
-      padding: 1rem 1.5rem;
-      box-shadow: 0 2px 4px var(--cor-sombra);
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 20px var(--cor-sombra);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-    nav h1 {
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo h1 {
       color: var(--cor-navbar-texto);
       font-size: var(--tamanho-h2);
       font-weight: bold;
       font-family: 'Unbounded', sans-serif;
+    }
+
+    .R {
+      color: var(--cor-primaria);
     }
 
     .navbar-buttons {
@@ -125,41 +138,58 @@
       gap: 1rem;
     }
 
-    nav .btn {
+    .btn {
       font-size: var(--tamanho-p);
-      background-color: #22c55e;
-      color: #000;
-      padding: 0.5rem 1.25rem;
-      border-radius: 9999px;
-      font-weight: bold;
+      background: var(--gradiente-primario);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 600;
       text-decoration: none;
       transition: all 0.3s ease;
-      font-family: 'Unbounded', sans-serif;
-    }
-
-    nav .btn:hover {
-      background-color: #16a34a;
-      transform: translateY(-3px);
+      border: none;
+      cursor: pointer;
       box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+      font-family: 'Inter', sans-serif;
     }
 
-    /* Hero Section */
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+    }
+
+    .btn-secundario {
+      background: transparent;
+      color: var(--cor-primaria);
+      border: 2px solid var(--cor-primaria);
+      box-shadow: none;
+    }
+
+    .btn-secundario:hover {
+      background: var(--cor-primaria);
+      color: white;
+    }
+
+    /* Hero Section Modernizada */
     .hero {
       position: relative;
-      height: 570px;
-      background-image: url('https://tse2.mm.bing.net/th/id/OIP.tjjBhm2DrcdkIqzxXDO9ygHaE8?rs=1&pid=ImgDetMain&o=7&rm=3');
+      min-height: 80vh;
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                  url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80');
       background-size: cover;
       background-position: center;
+      background-attachment: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding: 4rem 2rem;
     }
 
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background-color: var(--cor-hero-overlay);
-      padding: 2rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    .hero-content {
+      max-width: 800px;
+      z-index: 2;
     }
 
     .hero h2 {
@@ -167,114 +197,236 @@
       font-weight: bold;
       margin-bottom: 1.5rem;
       font-family: 'Unbounded', sans-serif;
+      line-height: 1.2;
     }
 
-    .hero ul {
-      list-style: none;
-      padding: 0;
-      margin-bottom: 2rem;
-    }
-
-    .hero ul li {
-      margin-bottom: 0.75rem;
+    .hero p {
       font-size: var(--tamanho-p);
+      margin-bottom: 2.5rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .btn {
-      background-color: #22c55e;
-      color: #000;
-      padding: 0.75rem 1.5rem;
-      border-radius: 9999px;
-      font-size: var(--tamanho-p);
-      font-weight: bold;
-      text-decoration: none;
-      display: inline-block;
-      transition: all 0.3s ease;
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 5rem 2rem;
+      background-color: var(--cor-fundo-secundario);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-title h2 {
+      font-size: var(--tamanho-h2);
+      color: var(--cor-texto);
+      margin-bottom: 1rem;
       font-family: 'Unbounded', sans-serif;
     }
 
-    .btn:hover {
-      background-color: #16a34a;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    .section-title p {
+      font-size: var(--tamanho-p);
+      color: var(--cor-texto-claro);
+      max-width: 600px;
+      margin: 0 auto;
     }
 
-    /* Info Section - MELHORADA */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background-color: var(--cor-card);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      box-shadow: 0 5px 20px var(--cor-sombra);
+      transition: all 0.3s ease;
+      border: 1px solid var(--cor-borda);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px var(--cor-sombra-forte);
+    }
+
+    .feature-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--cor-primaria);
+    }
+
+    .feature-card h3 {
+      font-size: var(--tamanho-h3);
+      margin-bottom: 1rem;
+      color: var(--cor-texto);
+      font-family: 'Unbounded', sans-serif;
+    }
+
+    .feature-card p {
+      font-size: var(--tamanho-p);
+      color: var(--cor-texto-claro);
+    }
+
+    /* Info Section Melhorada */
     .info {
-      background-color: var(--cor-info-bg);
-      padding: 4rem 1.5rem;
-      color: var(--cor-info-texto);
+      padding: 5rem 2rem;
+      background-color: var(--cor-fundo);
     }
 
     .info-grid {
-      max-width: 1200px;
-      margin: 0 auto;
       display: grid;
       grid-template-columns: 1fr;
-      gap: 3rem;
+      gap: 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    .linha {
-      border-right: none;
-      padding-right: 0;
-      padding-bottom: 2.5rem;
-      border-bottom: 2px solid var(--cor-divisao);
+    .info-card {
+      background-color: var(--cor-card);
+      border-radius: 16px;
+      padding: 3rem;
+      box-shadow: 0 5px 20px var(--cor-sombra);
+      border: 1px solid var(--cor-borda);
     }
 
-    .info h3 {
+    .info-card h3 {
       font-size: var(--tamanho-h3);
       margin-bottom: 1.5rem;
       font-family: 'Unbounded', sans-serif;
+      color: var(--cor-primaria);
       position: relative;
       display: inline-block;
     }
 
-    .info h3::after {
+    .info-card h3::after {
       content: '';
       position: absolute;
       bottom: -8px;
       left: 0;
       width: 50px;
       height: 3px;
-      background: #22c55e;
+      background: var(--cor-primaria);
       border-radius: 2px;
     }
 
-    .info ul {
+    .info-list {
       list-style: none;
       padding: 0;
       margin-top: 1.5rem;
     }
 
-    .info ul li {
+    .info-list li {
       margin-bottom: 1rem;
       font-size: var(--tamanho-p);
       line-height: 1.6;
-      padding-left: 1.5rem;
+      padding-left: 2rem;
       position: relative;
     }
 
-    .info ul li::before {
+    .info-list li::before {
       content: '✓';
       position: absolute;
       left: 0;
-      color: #22c55e;
+      color: var(--cor-primaria);
       font-weight: bold;
+      font-size: 1.2rem;
     }
 
-    .info p {
+    .info-card p {
       font-size: var(--tamanho-p);
       line-height: 1.7;
       margin-top: 1.5rem;
-    }
-
-    .R {
-      color: #22c55e;
+      color: var(--cor-texto-claro);
     }
 
     .highlight {
-      color: #22c55e;
+      color: var(--cor-primaria);
       font-weight: bold;
+    }
+
+    /* CTA Section */
+    .cta {
+      padding: 5rem 2rem;
+      background: var(--gradiente-hero);
+      color: white;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: var(--tamanho-h2);
+      margin-bottom: 1.5rem;
+      font-family: 'Unbounded', sans-serif;
+    }
+
+    .cta p {
+      font-size: var(--tamanho-p);
+      margin-bottom: 2.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0.9;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--cor-secundaria);
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      font-size: var(--tamanho-h2);
+      margin-bottom: 1rem;
+      font-family: 'Unbounded', sans-serif;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--cor-primaria);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #334155;
+      padding-top: 2rem;
+      font-size: 0.9rem;
+      opacity: 0.8;
     }
 
     /* Bolinha de Acessibilidade */
@@ -314,13 +466,12 @@
       position: fixed;
       bottom: 90px;
       right: 20px;
-      background: var(--cor-widget);
+      background: var(--cor-card);
       border: 1px solid var(--cor-borda);
-      border-radius: 15px;
+      border-radius: 16px;
       padding: 20px;
       z-index: 1000;
-      box-shadow: 0 8px 30px var(--cor-sombra);
-      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 30px var(--cor-sombra-forte);
       transform: scale(0.8);
       opacity: 0;
       visibility: hidden;
@@ -344,7 +495,7 @@
     .menu-titulo {
       font-size: 16px;
       font-weight: bold;
-      color: var(--cor-widget-texto);
+      color: var(--cor-texto);
       text-transform: uppercase;
       letter-spacing: 1px;
       margin-bottom: 10px;
@@ -374,12 +525,12 @@
       transition: all 0.3s ease;
       min-height: 60px;
       gap: 5px;
-      box-shadow: 0 4px 10px rgba(42, 167, 69, 0.3);
+      box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3);
     }
 
     .botao-acessibilidade:hover {
       transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(42, 167, 69, 0.4);
+      box-shadow: 0 6px 15px rgba(34, 197, 94, 0.4);
     }
 
     .botao-acessibilidade .icone {
@@ -403,15 +554,51 @@
       animation: pulse 2s infinite;
     }
 
+    /* Responsividade */
+    @media (min-width: 768px) {
+      .info-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+      }
+      
+      .hero h2 {
+        font-size: 3.5rem;
+      }
+    }
+
     @media (max-width: 768px) {
-      .navbar-buttons {
+      nav {
+        padding: 1rem;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 1rem;
       }
 
-      nav .btn {
-        padding: 0.4rem 1rem;
-        font-size: 0.9rem;
+      .navbar-buttons {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .hero {
+        min-height: 70vh;
+        padding: 3rem 1rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 250px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .info-card {
+        padding: 2rem;
       }
 
       /* Ajustes para a bolinha de acessibilidade em mobile */
@@ -452,61 +639,19 @@
       }
     }
 
-    @media (min-width: 768px) {
-      .hero-overlay {
-        padding: 3rem 4rem;
-      }
-
+    @media (max-width: 480px) {
       .hero h2 {
-        font-size: var(--tamanho-h1);
+        font-size: 2rem;
       }
 
-      .info-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 4rem;
+      .section-title h2 {
+        font-size: 1.8rem;
       }
 
-      .linha {
-        border-right: 3px solid #22c55e;
-        border-bottom: none;
-        padding-right: 2rem;
-        padding-bottom: 0;
-      }
-    }
-
-    @media (max-width: 500px) {
-      .bolinha-acessibilidade {
-        width: 65px;
-        height: 65px;
-        bottom: 20px;
-        right: 20px;
-        font-size: 26px;
-      }
-
-      .menu-acessibilidade {
-        bottom: 100px;
-        right: 20px;
-        min-width: 170px;
-      }
-    }
-
-    /* Para telas muito pequenas */
-    @media (max-width: 360px) {
-      .menu-acessibilidade {
-        right: 10px;
-        left: 10px;
-        min-width: auto;
-      }
-      
-      nav {
-        padding: 0.75rem 1rem;
-        flex-direction: column;
-        gap: 1rem;
-      }
-      
-      .navbar-buttons {
-        width: 100%;
-        justify-content: center;
+      .features,
+      .info,
+      .cta {
+        padding: 3rem 1rem;
       }
     }
   </style>
@@ -544,40 +689,131 @@
 
   <!-- Navbar -->
   <nav>
-    <h1><span class="R">R</span>egua</h1>
+    <div class="logo">
+      <h1><span class="R">R</span>egua</h1>
+    </div>
     <div class="navbar-buttons">
-      <a href="{% url 'loginatalho' %}" class="btn">Login</a>
+      <a href="{% url 'loginatalho' %}" class="btn btn-secundario">Login</a>
       <a href="{% url 'autenticar' %}" class="btn">Cadastrar</a>
     </div>
   </nav>
 
-  <!-- Hero -->
+  <!-- Hero Section -->
   <section class="hero">
-    <div class="hero-overlay">
-      <!-- conteúdo opcional dentro do hero -->
+    <div class="hero-content">
+      <h2>Transforme sua Barbearia com Tecnologia</h2>
+      <p>O sistema completo para gerenciar agendamentos, clientes e finanças da sua barbearia de forma simples e eficiente.</p>
+      <div class="hero-buttons">
+        <a href="{% url 'autenticar' %}" class="btn">Começar Agora</a>
+        <a href="#features" class="btn btn-secundario">Saiba Mais</a>
+      </div>
     </div>
   </section>
 
-  <!-- Info Section - MELHORADA -->
-  <section class="info">
-    <div class="info-grid">
-      <div class="linha">
-        <h3>Imagine ter</h3>
-        <ul>
-          <li>Agenda lotada com agendamentos online e lembretes automáticos.</li>
-          <li>Controle total do seu estoque, sem surpresas e desperdícios.</li>
-          <li>Relatórios completos para acompanhar o desempenho do seu negócio.</li>
-          <li>Comunicação direta com seus clientes, com promoções e novidades exclusivas.</li>
-        </ul>
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-title">
+        <h2>Recursos Incríveis</h2>
+        <p>Tudo que você precisa para levar sua barbearia para o próximo nível</p>
       </div>
-      <div>
-        <h3><span class="highlight">Venha conosco!</span></h3>
-        <p>
-          Diga adeus à papelada e planilhas! Nosso sistema é simples, intuitivo e completo, feito sob medida para a sua barbearia.
-        </p>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h3>Agendamento Online</h3>
+          <p>Seus clientes agendam horários 24/7, sem necessidade de ligações</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">👥</div>
+          <h3>Gestão de Clientes</h3>
+          <p>Histórico completo, preferências e fidelização de clientes</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">💰</div>
+          <h3>Controle Financeiro</h3>
+          <p>Acompanhe receitas, despesas e lucro em tempo real</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Relatórios Detalhados</h3>
+          <p>Análises completas do desempenho do seu negócio</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Site Mobile</h3>
+          <p>Gerencie sua barbearia de qualquer lugar, a qualquer hora</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🔔</div>
+          <h3>Lembretes Automáticos</h3>
+          <p>Reduza faltas com notificações para seus clientes</p>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- Info Section -->
+  <section class="info">
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>Imagine ter</h3>
+        <ul class="info-list">
+          <li>Agenda sempre lotada com agendamentos online 24/7</li>
+          <li>Controle total do estoque, sem surpresas ou desperdícios</li>
+          <li>Relatórios completos para tomar decisões inteligentes</li>
+          <li>Comunicação direta com promoções exclusivas</li>
+          <li>Sistema de fidelidade que mantém clientes fiéis</li>
+          <li>Gestão financeira simplificada e automatizada</li>
+        </ul>
+      </div>
+      
+      <div class="info-card">
+        <h3><span class="highlight">Venha conosco!</span></h3>
+        <p>
+          Diga adeus à papelada, planilhas confusas e agendamentos perdidos. Nosso sistema foi desenvolvido especificamente para barbearias, com uma interface intuitiva que qualquer um pode usar.
+        </p>
+        <p>
+          Junte-se a centenas de barbearias que já transformaram seus negócios com a Regua. Mais tempo focando no que importa: seus clientes e sua arte.
+        </p>
+        <div style="margin-top: 2rem;">
+          <a href="{% url 'autenticar' %}" class="btn">Experimente Grátis</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="container">
+      <h2>Pronto para revolucionar sua barbearia?</h2>
+      <p>Junte-se a milhares de barbearias que já usam a Regua e veja a diferença no primeiro mês.</p>
+      <a href="{% url 'autenticar' %}" class="btn" style="background: white; color: #22c55e;">Começar Agora</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <span class="R">R</span>egua
+      </div>
+      <div class="footer-links">
+        <a href="#features">Recursos</a>
+        <a href="{% url 'loginatalho' %}">Login</a>
+        <a href="{% url 'autenticar' %}">Cadastrar</a>
+        <a href="#">Suporte</a>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Regua. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
 
   <script>
     // Funções de Acessibilidade
@@ -683,6 +919,20 @@
           bolinha.classList.remove('pulsando');
         }
       }, 10000);
+    });
+
+    // Smooth scroll para links internos
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
     });
   </script>
 </body>

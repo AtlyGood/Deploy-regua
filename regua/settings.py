@@ -5,18 +5,19 @@ Django settings for regua project.
 from pathlib import Path
 import os
 import dj_database_url
+from decouple import config  # Adicione esta linha
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-%5^o-hwktba25du5q8q1q-m@x(7tp0#7cuginopxmt9rgbe*4%')
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-%5^o-hwktba25du5q8q1q-m@x(7tp0#7cuginopxmt9rgbe*4%')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,.vercel.app,.railway.app,.onrender.com').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,.vercel.app,.railway.app,.onrender.com').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -65,19 +66,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'regua.wsgi.application'
 
 # Database
+# Configuração do banco de dados para produção
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-# Configuração do banco de dados para produção (se DATABASE_URL estiver definida)
-if os.environ.get('DATABASE_URL'):
-    DATABASES['default'] = dj_database_url.config(
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL', default='sqlite:///db.sqlite3'),
         conn_max_age=600,
         ssl_require=not DEBUG
     )
+}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -104,9 +100,9 @@ USE_TZ = True
 
 # Cloudinary Configuration - ADICIONE ESTA SEÇÃO
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dzucrvvpl'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '926736494999697'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', 'c5HhdXH7voS1CgN3Z-YhHYScmc4'),
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME', default='dzucrvvpl'),
+    'API_KEY': config('CLOUDINARY_API_KEY', default='926736494999697'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET', default='c5HhdXH7voS1CgN3Z-YhHYScmc4'),
 }
 
 # Storage configuration - ALTERE ESTA LINHA
@@ -114,14 +110,14 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 # Media files - MANTENHA ASSIM (Cloudinary irá substituir)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Configurações para WhiteNoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -134,6 +130,25 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Logging configuration para produção
+if not DEBUG:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'root': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+        },
+    }
