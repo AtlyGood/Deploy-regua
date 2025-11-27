@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
 import json
 from .models import Barbearia, Usuario,Agendamento
+import cloudinary.uploader
 
 
 
@@ -140,25 +141,35 @@ def perfil(request):
 def upload_foto_perfil(request):
     if request.method == 'POST' and request.FILES.get('foto_perfil'):
         try:
-            usuario = Usuario.objects.get(id=request.session['usuario_id'])
+            # Upload para Cloudinary
+            result = cloudinary.uploader.upload(
+                request.FILES['foto_perfil'],
+                folder="perfis",
+                transformation=[
+                    {'width': 300, 'height': 300, 'crop': 'fill'},
+                    {'quality': 'auto'}
+                ]
+            )
             
-            # Remove a foto antiga se existir
-            if usuario.foto_perfil:
-                if os.path.isfile(usuario.foto_perfil.path):
-                    os.remove(usuario.foto_perfil.path)
+            # Salva a URL do Cloudinary no usuário
+            request.user.foto_perfil = result['secure_url']
+            request.user.save()
             
-            # Salva a nova foto
-            foto = request.FILES['foto_perfil']
-            fs = FileSystemStorage()
-            filename = fs.save(f'perfil/user_{usuario.id}_{foto.name}', foto)
-            usuario.foto_perfil = filename
-            usuario.save()
+            return JsonResponse({
+                'status': 'success',
+                'foto_url': result['secure_url']
+            })
             
-            return JsonResponse({'status': 'success', 'foto_url': usuario.foto_perfil.url})
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            })
     
-    return JsonResponse({'status': 'error'}, status=400)
+    return JsonResponse({
+        'status': 'error', 
+        'message': 'Nenhum arquivo enviado'
+    })
 
 def atualizar_perfil(request):
     if request.method == 'POST':
@@ -780,4 +791,5 @@ def resetar_acessibilidade(request):
     if 'config_acessibilidade' in request.session:
         del request.session['config_acessibilidade']
     
+
     return JsonResponse({'status': 'success', 'message': 'Configurações resetadas!'})
