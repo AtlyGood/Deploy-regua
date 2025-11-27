@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils import timezone
-from django.contrib.auth.models import AbstractUser
-from django.db import models
 
 
 class Usuario(models.Model):
@@ -72,13 +70,4 @@ class Agendamento(models.Model):
     horario_estimado = models.TimeField(null=True, blank=True)
     
     def __str__(self):
-        return f"{self.cliente.nome} - {self.barbearia.nome_barbearia} - {self.data} {self.horario}"
-        
-class CustomUser(AbstractUser):
-    foto_perfil = models.URLField(max_length=500, blank=True, null=True)  # Mude para URLField
-    telefone = models.CharField(max_length=15, blank=True, null=True)
-    cpf = models.CharField(max_length=14, blank=True, null=True)
-    
-    def __str__(self):
-        return self.email
-
+        return f"{self.cliente.nome} - {self.barbearia.nome_barbearia} - {self.data} {self.horario}" 
