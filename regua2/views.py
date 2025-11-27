@@ -244,7 +244,7 @@ def barbeiro_pag(request):
     except Usuario.DoesNotExist:
         return redirect('loginatalho')
 
-def cadastrar_barbearia(request):
+def cadastro_barbearia(request):
     if request.method == 'POST':
         try:
             # Upload da logo para Cloudinary
