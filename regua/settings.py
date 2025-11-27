@@ -15,7 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-%5^o-hwktba25du5q8q1q-m@x(7tp0#7cuginopxmt9rgbe*4%')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=True, cast=bool)  # Mudei para True como padrão
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,.vercel.app,.railway.app,.onrender.com').split(',')
 
@@ -65,14 +65,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'regua.wsgi.application'
 
-# Database
-# Configuração do banco de dados para produção
+# Database - CONFIGURAÇÃO ATUALIZADA PARA SQLITE LOCAL
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL', default='sqlite:///db.sqlite3'),
-        conn_max_age=600,
-        ssl_require=not DEBUG
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 # Password validation
@@ -98,14 +96,14 @@ TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_TZ = True
 
-# Cloudinary Configuration - ADICIONE ESTA SEÇÃO
+# Cloudinary Configuration - MANTIDO
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME', default='dzucrvvpl'),
     'API_KEY': config('CLOUDINARY_API_KEY', default='926736494999697'),
     'API_SECRET': config('CLOUDINARY_API_SECRET', default='c5HhdXH7voS1CgN3Z-YhHYScmc4'),
 }
 
-# Storage configuration - ALTERE ESTA LINHA
+# Storage configuration - MANTIDO
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Static files (CSS, JavaScript, Images)
@@ -115,14 +113,14 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-# Media files - MANTENHA ASSIM (Cloudinary irá substituir)
+# Media files - MANTIDO (Cloudinary irá substituir)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Configurações para WhiteNoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Security settings for production
+# Security settings for production - AGORA SÓ APLICA SE DEBUG=False
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
