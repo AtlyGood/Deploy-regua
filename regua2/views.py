@@ -244,59 +244,41 @@ def barbeiro_pag(request):
     except Usuario.DoesNotExist:
         return redirect('loginatalho')
 
-def cadastro_barbearia(request):
-    # Verifica se o usuário está logado
-    if not request.session.get('logado'):
-        return redirect('loginatalho')
-    
-    try:
-        
-        usuario = Usuario.objects.get(id=request.session['usuario_id'])
-        
-        
-        if hasattr(usuario, 'barbearia'):
-            messages.warning(request, 'Você já possui uma barbearia cadastrada!')
-            return redirect('barbeiroatalho')
-            
-    except (Usuario.DoesNotExist, KeyError):
-        messages.error(request, "Sessão inválida. Faça login novamente.")
-        return redirect('loginatalho')
-
+def cadastrar_barbearia(request):
     if request.method == 'POST':
         try:
-            # Cria a barbearia associada ao usuário existente
-            barbearia = Barbearia.objects.create(
-                usuario=usuario,  # Associa ao usuário logado
-                nome_barbearia=request.POST['nome_barbearia'],
-                telefone_comercial=request.POST['telefone_comercial'],
-                endereco=request.POST['endereco'],
-                cidade=request.POST['cidade'],
-                estado=request.POST['estado'],
-                foto_logo=request.FILES.get('logo-upload'),
-                status_barbearia=request.POST.get('status_barbearia', 'aberto')
+            # Upload da logo para Cloudinary
+            logo_url = None
+            if 'logo-upload' in request.FILES:
+                result = cloudinary.uploader.upload(
+                    request.FILES['logo-upload'],
+                    folder="barbearias/logos",
+                    transformation=[
+                        {'width': 300, 'height': 300, 'crop': 'fill'},
+                        {'quality': 'auto'}
+                    ]
+                )
+                logo_url = result['secure_url']
+            
+            # Cria/atualiza barbearia
+            barbearia, created = Barbearia.objects.update_or_create(
+                usuario=request.user,
+                defaults={
+                    'nome_barbearia': request.POST['nome_barbearia'],
+                    'telefone_comercial': request.POST['telefone_comercial'],
+                    'endereco': request.POST['endereco'],
+                    'cidade': request.POST['cidade'],
+                    'estado': request.POST['estado'],
+                    'status_barbearia': request.POST.get('status_barbearia', 'aberto'),
+                    'foto_logo': logo_url
+                }
             )
-
-            # Atualiza o tipo do usuário para barbearia
-            if usuario.tipo != 'barbearia':
-                usuario.tipo = 'barbearia'
-                usuario.save()
-
-            messages.success(request, 'Barbearia cadastrada com sucesso!')
-            return redirect('barbeiroatalho')
-
+            
+            messages.success(request, 'Barbearia salva com sucesso!')
+            return redirect('minha_barbatalho')
+            
         except Exception as e:
-            print(f"Erro ao cadastrar barbearia: {str(e)}")
-            messages.error(request, f'Erro ao cadastrar barbearia: {str(e)}')
-    
-    # Contexto para o template
-    context = {
-        'usuario': usuario,
-        'nome_completo': f"{usuario.nome} {usuario.sobrenome}",
-        'email': usuario.email,
-        'telefone': usuario.telefone
-    }
-    
-    return render(request, 'cadastro_barbearia.html', context)
+            messages.error(request, f'Erro ao salvar barbearia: {str(e)}')
 
 def editar_horarios(request):
     if not request.session.get('logado'):
@@ -793,3 +775,4 @@ def resetar_acessibilidade(request):
     
 
     return JsonResponse({'status': 'success', 'message': 'Configurações resetadas!'})
+
