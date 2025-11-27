@@ -9,7 +9,6 @@ from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
 import json
 from .models import Barbearia, Usuario,Agendamento
-import cloudinary.uploader
 
 
 
@@ -141,35 +140,25 @@ def perfil(request):
 def upload_foto_perfil(request):
     if request.method == 'POST' and request.FILES.get('foto_perfil'):
         try:
-            # Upload para Cloudinary
-            result = cloudinary.uploader.upload(
-                request.FILES['foto_perfil'],
-                folder="perfis",
-                transformation=[
-                    {'width': 300, 'height': 300, 'crop': 'fill'},
-                    {'quality': 'auto'}
-                ]
-            )
+            usuario = Usuario.objects.get(id=request.session['usuario_id'])
             
-            # Salva a URL do Cloudinary no usuário
-            request.user.foto_perfil = result['secure_url']
-            request.user.save()
+            # Remove a foto antiga se existir
+            if usuario.foto_perfil:
+                if os.path.isfile(usuario.foto_perfil.path):
+                    os.remove(usuario.foto_perfil.path)
             
-            return JsonResponse({
-                'status': 'success',
-                'foto_url': result['secure_url']
-            })
+            # Salva a nova foto
+            foto = request.FILES['foto_perfil']
+            fs = FileSystemStorage()
+            filename = fs.save(f'perfil/user_{usuario.id}_{foto.name}', foto)
+            usuario.foto_perfil = filename
+            usuario.save()
             
+            return JsonResponse({'status': 'success', 'foto_url': usuario.foto_perfil.url})
         except Exception as e:
-            return JsonResponse({
-                'status': 'error',
-                'message': str(e)
-            })
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     
-    return JsonResponse({
-        'status': 'error', 
-        'message': 'Nenhum arquivo enviado'
-    })
+    return JsonResponse({'status': 'error'}, status=400)
 
 def atualizar_perfil(request):
     if request.method == 'POST':
@@ -245,40 +234,58 @@ def barbeiro_pag(request):
         return redirect('loginatalho')
 
 def cadastro_barbearia(request):
+    # Verifica se o usuário está logado
+    if not request.session.get('logado'):
+        return redirect('loginatalho')
+    
+    try:
+        
+        usuario = Usuario.objects.get(id=request.session['usuario_id'])
+        
+        
+        if hasattr(usuario, 'barbearia'):
+            messages.warning(request, 'Você já possui uma barbearia cadastrada!')
+            return redirect('barbeiroatalho')
+            
+    except (Usuario.DoesNotExist, KeyError):
+        messages.error(request, "Sessão inválida. Faça login novamente.")
+        return redirect('loginatalho')
+
     if request.method == 'POST':
         try:
-            # Upload da logo para Cloudinary
-            logo_url = None
-            if 'logo-upload' in request.FILES:
-                result = cloudinary.uploader.upload(
-                    request.FILES['logo-upload'],
-                    folder="barbearias/logos",
-                    transformation=[
-                        {'width': 300, 'height': 300, 'crop': 'fill'},
-                        {'quality': 'auto'}
-                    ]
-                )
-                logo_url = result['secure_url']
-            
-            # Cria/atualiza barbearia
-            barbearia, created = Barbearia.objects.update_or_create(
-                usuario=request.user,
-                defaults={
-                    'nome_barbearia': request.POST['nome_barbearia'],
-                    'telefone_comercial': request.POST['telefone_comercial'],
-                    'endereco': request.POST['endereco'],
-                    'cidade': request.POST['cidade'],
-                    'estado': request.POST['estado'],
-                    'status_barbearia': request.POST.get('status_barbearia', 'aberto'),
-                    'foto_logo': logo_url
-                }
+            # Cria a barbearia associada ao usuário existente
+            barbearia = Barbearia.objects.create(
+                usuario=usuario,  # Associa ao usuário logado
+                nome_barbearia=request.POST['nome_barbearia'],
+                telefone_comercial=request.POST['telefone_comercial'],
+                endereco=request.POST['endereco'],
+                cidade=request.POST['cidade'],
+                estado=request.POST['estado'],
+                foto_logo=request.FILES.get('logo-upload'),
+                status_barbearia=request.POST.get('status_barbearia', 'aberto')
             )
-            
-            messages.success(request, 'Barbearia salva com sucesso!')
-            return redirect('minha_barbatalho')
-            
+
+            # Atualiza o tipo do usuário para barbearia
+            if usuario.tipo != 'barbearia':
+                usuario.tipo = 'barbearia'
+                usuario.save()
+
+            messages.success(request, 'Barbearia cadastrada com sucesso!')
+            return redirect('barbeiroatalho')
+
         except Exception as e:
-            messages.error(request, f'Erro ao salvar barbearia: {str(e)}')
+            print(f"Erro ao cadastrar barbearia: {str(e)}")
+            messages.error(request, f'Erro ao cadastrar barbearia: {str(e)}')
+    
+    # Contexto para o template
+    context = {
+        'usuario': usuario,
+        'nome_completo': f"{usuario.nome} {usuario.sobrenome}",
+        'email': usuario.email,
+        'telefone': usuario.telefone
+    }
+    
+    return render(request, 'cadastro_barbearia.html', context)
 
 def editar_horarios(request):
     if not request.session.get('logado'):
@@ -773,6 +780,4 @@ def resetar_acessibilidade(request):
     if 'config_acessibilidade' in request.session:
         del request.session['config_acessibilidade']
     
-
     return JsonResponse({'status': 'success', 'message': 'Configurações resetadas!'})
-
